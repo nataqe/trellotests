@@ -2,6 +2,8 @@ package dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import java.util.Objects;
+
 public class PrefsDto {
 
     private String permissionLevel;
@@ -243,5 +245,35 @@ public class PrefsDto {
     public PrefsDto setCanInvite(boolean canInvite) {
         this.canInvite = canInvite;
         return this;
+    }
+
+    @Override
+    public String toString() {
+        return "PrefsDto{" +
+                "permissionLevel='" + permissionLevel + '\'' +
+                ", hideVotes=" + hideVotes +
+                ", voting='" + voting + '\'' +
+                ", comments='" + comments + '\'' +
+                ", invitations='" + invitations + '\'' +
+                ", selfJoin=" + selfJoin +
+                ", cardCovers=" + cardCovers +
+                ", cardAging='" + cardAging + '\'' +
+                ", calendarFeedEnabled=" + calendarFeedEnabled +
+                ", hiddenPluginBoardButtons=" + hiddenPluginBoardButtons +
+                ", background='" + background + '\'' +
+                ", backgroundColor='" + backgroundColor + '\'' +
+                ", backgroundImage='" + backgroundImage + '\'' +
+                ", backgroundImageScaled='" + backgroundImageScaled + '\'' +
+                ", backgroundTile=" + backgroundTile +
+                ", backgroundBrightness='" + backgroundBrightness + '\'' +
+                ", backgroundBottomColor='" + backgroundBottomColor + '\'' +
+                ", backgroundTopColor='" + backgroundTopColor + '\'' +
+                ", canBePublic=" + canBePublic +
+                ", canBeEnterprise=" + canBeEnterprise +
+                ", canBeOrg=" + canBeOrg +
+                ", canBePrivate=" + canBePrivate +
+                ", canInvite=" + canInvite +
+                ", isTemplate=" + isTemplate +
+                '}';
     }
 }

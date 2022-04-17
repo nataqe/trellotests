@@ -2,7 +2,9 @@ package dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-public class BoardResponseDto{
+import java.util.Objects;
+
+public class BoardResponseDto {
 
     private String id;
     private String name;
@@ -18,7 +20,7 @@ public class BoardResponseDto{
     private Object limits;
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    private Object labelNames;
+    private LabelNamesDto labelNames;
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     private Object organization;
@@ -31,6 +33,7 @@ public class BoardResponseDto{
         this.organization = organization;
         return this;
     }
+
     public String getId() {
         return id;
     }
@@ -130,11 +133,11 @@ public class BoardResponseDto{
         return this;
     }
 
-    public Object getLabelNames() {
+    public LabelNamesDto getLabelNames() {
         return labelNames;
     }
 
-    public BoardResponseDto setLabelNames(Object labelNames) {
+    public BoardResponseDto setLabelNames(LabelNamesDto labelNames) {
         this.labelNames = labelNames;
         return this;
     }
@@ -146,5 +149,25 @@ public class BoardResponseDto{
     public BoardResponseDto setShortUrl(String shortUrl) {
         this.shortUrl = shortUrl;
         return this;
+    }
+
+    @Override
+    public String toString() {
+        return "BoardResponseDto{" +
+                "id='" + id + '\'' +
+                ", name='" + name + '\'' +
+                ", desc='" + desc + '\'' +
+                ", idOrganization='" + idOrganization + '\'' +
+                ", descData=" + descData +
+                ", closed=" + closed +
+                ", idEnterprise='" + idEnterprise + '\'' +
+                ", pinned=" + pinned +
+                ", url='" + url + '\'' +
+                ", shortUrl='" + shortUrl + '\'' +
+                ", prefs=" + prefs +
+                ", limits=" + limits +
+                ", labelNames=" + labelNames +
+                ", organization=" + organization +
+                '}';
     }
 }
