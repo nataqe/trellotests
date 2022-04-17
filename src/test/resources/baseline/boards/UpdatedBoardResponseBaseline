@@ -1,0 +1,49 @@
+{
+  "descData": {
+    "emoji": {}
+  },
+  "pinned": false,
+  "labelNames": {
+    "sky": "",
+    "orange": "LabelNamesOrange",
+    "red": "LabelNamesRed",
+    "pink": "",
+    "green": "LabelNamesGreen",
+    "blue": "LabelNamesBlue",
+    "lime": "",
+    "black": "",
+    "yellow": "LabelNamesYellow",
+    "purple": "LabelNamesPurple"
+  },
+  "shortUrl": "https://trello.com/b/z0CXjARQ",
+  "name": "UpdatedName",
+  "idOrganization": "625c50f21962e36d65dabcfb",
+  "closed": true,
+  "id": "625c50f4d9b30d859d556775",
+  "url": "https://trello.com/b/z0CXjARQ/updatedname",
+  "desc": "UpdatedDesc",
+  "prefs": {
+    "backgroundBrightness": "dark",
+    "backgroundColor": "#B04632",
+    "comments": "org",
+    "canBeEnterprise": true,
+    "backgroundTopColor": "#B04632",
+    "hideVotes": true,
+    "canBeOrg": true,
+    "backgroundBottomColor": "#B04632",
+    "voting": "members",
+    "backgroundTile": false,
+    "calendarFeedEnabled": true,
+    "hiddenPluginBoardButtons": [],
+    "canBePrivate": true,
+    "canBePublic": true,
+    "permissionLevel": "org",
+    "cardAging": "pirate",
+    "canInvite": true,
+    "invitations": "admins",
+    "background": "red",
+    "isTemplate": false,
+    "cardCovers": false,
+    "selfJoin": false
+  }
+}

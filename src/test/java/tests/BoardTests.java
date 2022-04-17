@@ -2,35 +2,31 @@ package tests;
 
 import client.BoardClient;
 import client.OrganizationClient;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import dataproviders.BoardInputDataProvider;
 import dataproviders.BoardUpdateDataProvider;
 import dto.BoardPostRequestDto;
-import dto.BoardPutRequestDto;
 import dto.BoardResponseDto;
 import dto.OrganizationResponseDto;
 import enums.PrefsBackground;
+import helpers.FileHelper;
 import org.junit.jupiter.api.*;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.EnumSource;
-import org.junit.jupiter.params.provider.MethodSource;
 
-import java.io.IOException;
-import java.util.Comparator;
-import java.util.Iterator;
-import java.util.Optional;
-import java.util.Spliterator;
-import java.util.function.*;
-import java.util.stream.*;
+import java.io.*;
 
-import static org.junit.jupiter.params.provider.Arguments.arguments;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class BoardTests {
 
     public static BoardClient boardClient = new BoardClient();
     public static OrganizationClient organizationClient = new OrganizationClient();
     public static String organizationId;
+    public static final String BASELINE_PATH = "baseline/boards/";
 
     @BeforeAll
     static void createTestSpace() throws IOException {
@@ -40,70 +36,62 @@ public class BoardTests {
 
     @Test
     @DisplayName("POST a new board with required field name")
-    public void postBoardTest() throws IOException {
+    public void testPostNewBoardWithCustomName() throws IOException {
         String boardName = "TestBoard_" + RandomStringUtils.random(5, true, true);
         BoardResponseDto boardResponse = boardClient.postNewBoard(boardName);
         BoardResponseDto newBoardResponse = boardClient.getBoardById(boardResponse.getId());
-        Assertions.assertEquals(boardName, newBoardResponse.getName(), "The name of the board should be " + boardName);
+        assertEquals(boardName, newBoardResponse.getName(), "The name of the new board should be " + boardName);
         boardClient.deleteBoardById(boardResponse.getId());
         boardClient.getNonExistingBoardById(boardResponse.getId());
     }
 
     @Test
     @DisplayName("POST a new board with all fields")
-    public void postBoardTestWithAllFields() throws IOException {
+    public void testPostBoardWithAllFields() throws IOException {
         BoardPostRequestDto boardInputRequest = new BoardInputDataProvider().getBoardInputTemplate().setIdOrganization(organizationId);
         BoardResponseDto newBoardResponse = boardClient.postNewBoard(boardInputRequest);
-        Assertions.assertEquals(boardInputRequest.getName(), newBoardResponse.getName(), "The name of the board should be " + boardInputRequest.getName());
+        BoardResponseDto baselineBoard = new ObjectMapper().readValue(FileHelper.getResourceAsString(BASELINE_PATH + "NewBoardResponseBaseline"), new TypeReference<>() {
+        });
+        assertThat(baselineBoard)
+                .as("The new board is not equal to baseline data.")
+                .usingRecursiveComparison()
+                .ignoringFields("id", "idOrganization", "shortUrl", "url")
+                .isEqualTo(newBoardResponse);
     }
 
     @ParameterizedTest(name = "POST a new board with {0} background")
     @EnumSource(PrefsBackground.class)
-    public void postNewBoardWithPrefsBackground(PrefsBackground prefsBackground) throws IOException {
+    public void testPostNewBoardWithPrefsBackground(PrefsBackground prefsBackground) throws IOException {
         BoardPostRequestDto boardInputRequest = new BoardInputDataProvider().getBoardInputTemplate()
                 .setPrefsBackground(prefsBackground)
                 .setIdOrganization(organizationId)
                 .setName("BoardWithBackground" + prefsBackground);
         BoardResponseDto newBoardResponse = boardClient.postNewBoard(boardInputRequest);
-        Assertions.assertEquals(boardInputRequest.getName(), newBoardResponse.getName(), "The name of the board should be " + boardInputRequest.getName());
-        Assertions.assertEquals(prefsBackground.toString(), newBoardResponse.getPrefs().getBackground(), "Background Name should be " + boardInputRequest.getPrefsBackground());
+        assertEquals(boardInputRequest.getName(), newBoardResponse.getName(), "The name of the board should be " + boardInputRequest.getName());
+        assertEquals(prefsBackground.toString(), newBoardResponse.getPrefs().getBackground(), "Background Name should be " + boardInputRequest.getPrefsBackground());
     }
 
     @Test
     @DisplayName("POST a new board with empty name")
-    public void postBoardTestWithEmptyName() throws IOException {
+    public void testPostBoardWithEmptyName() throws IOException {
         boardClient.postBoardWithEmptyName();
     }
 
     @Test
     @DisplayName("PUT request to update existing board")
-    public void updateBoardTestWithNewName() throws IOException {
+    public void testUpdateBoardWithOneParameter() throws IOException {
         BoardPostRequestDto boardInputRequest = new BoardInputDataProvider().getBoardInputTemplate()
                 .setIdOrganization(organizationId)
                 .setName("TestBoardToUpdate");
         String newBoardId = boardClient.postNewBoard(boardInputRequest).getId();
-        String newName = "TestBoardUpdated";
         BoardResponseDto updatedBoard = boardClient.updateExistingBoard(newBoardId, new BoardUpdateDataProvider().getBoardUpdateTemplate());
-        Assertions.assertEquals(newName, updatedBoard.getName(), "The board name should be " + newName);
-    }
-
-    @ParameterizedTest(name = "PUT request to update existing board field {0}")
-    @MethodSource("provideFieldsToUpdate")
-    public void updateBoardWithOneParameter(String fieldName, BoardPutRequestDto params) throws IOException {
-        BoardPostRequestDto boardInputRequest = new BoardInputDataProvider().getBoardInputTemplate()
-                .setIdOrganization(organizationId)
-                .setName("TestBoardToUpdate");
-        String newBoardId = boardClient.postNewBoard(boardInputRequest).getId();
-        BoardResponseDto updatedBoard = boardClient.updateExistingBoard(newBoardId, params);
-
-    }
-
-    public static Stream<Arguments> provideFieldsToUpdate() {
-        return Stream.of(
-                arguments("name", new BoardPutRequestDto().setName("UpdatedName")),
-                arguments("desc", new BoardPutRequestDto().setDesc("NewDesc")),
-                arguments("prefsBackground", new BoardPutRequestDto().setPrefsBackground(PrefsBackground.RED))
-        );
+        BoardResponseDto baselineBoard = new ObjectMapper().readValue(FileHelper.getResourceAsString(BASELINE_PATH + "UpdatedBoardResponseBaseline"), new TypeReference<>() {
+        });
+        assertThat(baselineBoard)
+                .as("Updated board is not equal to baseline data.")
+                .usingRecursiveComparison()
+                .ignoringFields("id", "idOrganization", "shortUrl", "url")
+                .isEqualTo(updatedBoard);
     }
 
     @AfterAll
