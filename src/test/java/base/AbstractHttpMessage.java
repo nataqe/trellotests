@@ -11,8 +11,8 @@ public abstract class AbstractHttpMessage {
 
     private AbstractHttpMessage(ResourceBundle rb) {
         if (rb.keySet().size() == 0) {
-            apiKey = System.getenv("$API_KEY");
-            token = System.getenv("$TOKEN");
+            apiKey = System.getenv("API_KEY");
+            token = System.getenv("TOKEN");
         } else {
             apiKey = rb.getString("API_KEY");
             token = rb.getString("TOKEN");
