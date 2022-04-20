@@ -79,12 +79,12 @@ public class BoardTests {
 
     @Test
     @DisplayName("PUT request to update existing board")
-    public void testUpdateBoardWithOneParameter() throws IOException {
+    public void testUpdateBoardWithAllParameters() throws IOException {
         BoardPostRequestDto boardInputRequest = new BoardInputDataProvider().getBoardInputTemplate()
                 .setIdOrganization(organizationId)
                 .setName("TestBoardToUpdate");
-        String newBoardId = boardClient.postNewBoard(boardInputRequest).getId();
-        BoardResponseDto updatedBoard = boardClient.updateExistingBoard(newBoardId, new BoardUpdateDataProvider().getBoardUpdateTemplate());
+        BoardResponseDto newBoard = boardClient.postNewBoard(boardInputRequest);
+        BoardResponseDto updatedBoard = boardClient.updateExistingBoard(newBoard.getId(), new BoardUpdateDataProvider().getBoardUpdateTemplate());
         BoardResponseDto baselineBoard = new ObjectMapper().readValue(FileHelper.getResourceAsString(BASELINE_PATH + "UpdatedBoardResponseBaseline"), new TypeReference<>() {
         });
         assertThat(baselineBoard)
