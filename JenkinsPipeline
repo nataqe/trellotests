@@ -40,4 +40,11 @@ pipeline {
     }
 }
 }
+post {
+        always {
+            emailext to: '$DEFAULT_RECIPIENTS',
+			body: "Details: ${env.JOB_NAME} Build Number: ${env.BUILD_NUMBER} Build: ${env.BUILD_URL} Console Output: ${env.BUILD_URL}/console", 
+			subject: "Test report for build ${env.BUILD_NUMBER}"
+        }
+    }
 }
