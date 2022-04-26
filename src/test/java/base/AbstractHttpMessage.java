@@ -1,30 +1,22 @@
 package base;
 
-import java.util.ResourceBundle;
+import helpers.ResourceBundleHelper;
+
+import java.util.*;
 
 public abstract class AbstractHttpMessage {
 
     private String headerAuthValue;
-    private static final ResourceBundle RESOURCE_BUNDLE = ResourceBundle.getBundle("application");
-    private String apiKey;
-    private String token;
 
     private AbstractHttpMessage(ResourceBundle rb) {
-        if (rb.keySet().size() == 0) {
-            apiKey = System.getenv("API_KEY");
-            token = System.getenv("TOKEN");
-        } else {
-            apiKey = rb.getString("API_KEY");
-            token = rb.getString("TOKEN");
-        }
         headerAuthValue = "OAuth oauth_consumer_key=\""
-                + apiKey
+                + ResourceBundleHelper.getResourceBundleKey(rb, "API_KEY")
                 + "\", oauth_token=\""
-                + token + "\"";
+                + ResourceBundleHelper.getResourceBundleKey(rb, "TOKEN") + "\"";
     }
 
     public AbstractHttpMessage() {
-        this(RESOURCE_BUNDLE);
+        this(ResourceBundleHelper.getResourceBundle("application"));
     }
 
     public String getHeaderAuthValue() {
