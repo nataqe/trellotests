@@ -23,8 +23,8 @@ public class BoardPostRequestDto {
     @JsonProperty("defaultLists")
     private boolean defaultLists;
 
-  /*  @JsonProperty("idBoardSource")
-    private String idBoardSource;*/
+    @JsonProperty("idBoardSource")
+    private String idBoardSource;
 
     @JsonProperty("keepFromSource")
     private String keepFromSource;
@@ -183,16 +183,14 @@ public class BoardPostRequestDto {
         return this;
     }
 
-    /*
-        public String getIdBoardSource() {
-            return idBoardSource;
-        }
+    public String getIdBoardSource() {
+        return idBoardSource;
+    }
 
-        public BoardRequestDto setIdBoardSource(String idBoardSource) {
-            this.idBoardSource = idBoardSource;
-            return this;
-        }
-    */
+    public BoardPostRequestDto setIdBoardSource(String idBoardSource) {
+        this.idBoardSource = idBoardSource;
+        return this;
+    }
 
     public String getKeepFromSource() {
         return keepFromSource;
