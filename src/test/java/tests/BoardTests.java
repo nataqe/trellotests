@@ -30,19 +30,19 @@ public class BoardTests {
 
     @BeforeAll
     static void createTestSpace() throws IOException {
-        OrganizationResponseDto newOrgResponse = organizationClient.postNewOrganization("testSpace");
-        organizationId = newOrgResponse.getId();
+        OrganizationResponseDto newOrganization = organizationClient.postNewOrganization("testSpace");
+        organizationId = newOrganization.getId();
     }
 
     @Test
     @DisplayName("POST a new board with required field name")
     public void testPostNewBoardWithCustomName() throws IOException {
         String boardName = "TestBoard_" + RandomStringUtils.random(5, true, true);
-        BoardResponseDto boardResponse = boardClient.postNewBoard(boardName);
-        BoardResponseDto newBoardResponse = boardClient.getBoardById(boardResponse.getId());
-        assertEquals(boardName, newBoardResponse.getName(), "The name of the new board should be " + boardName);
-        boardClient.deleteBoardById(boardResponse.getId());
-        boardClient.getNonExistingBoardById(boardResponse.getId());
+        BoardResponseDto newBoard = boardClient.postNewBoard(boardName);
+        BoardResponseDto newBoardById = boardClient.getBoardById(newBoard.getId());
+        assertEquals(boardName, newBoardById.getName(), "The name of the new board should be " + boardName);
+        //boardClient.deleteBoardById(newBoard.getId());
+        //boardClient.getNonExistingBoardById(newBoard.getId());
     }
 
     @Test
