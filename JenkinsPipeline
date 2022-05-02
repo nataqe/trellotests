@@ -43,8 +43,8 @@ pipeline {
 post {
         always {
             emailext to: '$DEFAULT_RECIPIENTS',
-			body: "$DEFAULT_CONTENT", 
-			subject: "$DEFAULT_SUBJECT"
+			body: '$DEFAULT_CONTENT', 
+			subject: '$DEFAULT_SUBJECT'
         }
     }
 }
