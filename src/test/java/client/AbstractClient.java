@@ -28,7 +28,7 @@ public abstract class AbstractClient extends AbstractHttpMessage {
         return doRequest(httpPost);
     }
 
-    public HttpResponse postRequest(String url, BoardPostRequestDto params) throws IOException {
+    public HttpResponse postRequest(String url, Object params) throws IOException {
         String str = new ObjectMapper().writeValueAsString(params);
         StringEntity entity = new StringEntity(str, ContentType.APPLICATION_JSON);
         HttpPost httpPost = new HttpPost(url);
@@ -41,7 +41,7 @@ public abstract class AbstractClient extends AbstractHttpMessage {
         return doRequest(httpDelete);
     }
 
-    public HttpResponse putRequest(String url, BoardPutRequestDto params) throws IOException {
+    public HttpResponse putRequest(String url, Object params) throws IOException {
         HttpPut httpPut = new HttpPut(url);
         String str = new ObjectMapper().writeValueAsString(params);
         StringEntity entity = new StringEntity(str, ContentType.APPLICATION_JSON);
