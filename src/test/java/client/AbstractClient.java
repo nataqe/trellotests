@@ -3,8 +3,6 @@ package client;
 import base.AbstractHttpMessage;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import dto.BoardPostRequestDto;
-import dto.BoardPutRequestDto;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.*;
 import org.apache.http.entity.ContentType;

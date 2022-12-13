@@ -1,6 +1,6 @@
 package dataproviders;
 
-import dto.BoardPostRequestDto;
+import dto.board.BoardPostRequestDto;
 import enums.PrefsComments;
 import enums.PrefsInvitations;
 import enums.PrefsPermissionLevel;

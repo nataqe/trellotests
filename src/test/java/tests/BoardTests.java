@@ -6,14 +6,13 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dataproviders.BoardInputDataProvider;
 import dataproviders.BoardUpdateDataProvider;
-import dto.BoardPostRequestDto;
-import dto.BoardResponseDto;
-import dto.OrganizationResponseDto;
+import dto.board.BoardPostRequestDto;
+import dto.board.BoardResponseDto;
+import dto.organization.OrganizationResponseDto;
 import enums.PrefsBackground;
 import helpers.FileHelper;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
-import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.util.EntityUtils;
 import org.junit.jupiter.api.*;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -59,7 +58,7 @@ public class BoardTests {
         assertThat(baselineBoard)
                 .as("The new board is not equal to baseline data.")
                 .usingRecursiveComparison()
-                .ignoringFields("id", "idOrganization", "shortUrl", "url")
+                .ignoringFields("id", "idOrganization", "shortUrl", "url", "prefs.switcherViews")
                 .isEqualTo(newBoardResponse);
     }
 
