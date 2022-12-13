@@ -23,9 +23,10 @@ public class BoardClient extends AbstractClient {
         });
     }
 
-    public void getNonExistingBoardById(String id) throws IOException {
+    public HttpResponse getBoardById(String id, int status) throws IOException {
         HttpResponse response = getRequest(URL + id);
-        Assertions.assertEquals(HttpStatus.SC_NOT_FOUND, response.getStatusLine().getStatusCode());
+        Assertions.assertEquals(status, response.getStatusLine().getStatusCode());
+        return response;
     }
 
     public BoardResponseDto postNewBoard(String name) throws IOException {
@@ -36,10 +37,15 @@ public class BoardClient extends AbstractClient {
     }
 
     public BoardResponseDto postNewBoard(BoardPostRequestDto params) throws IOException {
-        HttpResponse response = postRequest(URL, params);
-        Assertions.assertEquals(HttpStatus.SC_OK, response.getStatusLine().getStatusCode());
+        HttpResponse response = postNewBoard(params, HttpStatus.SC_OK);
         return new ObjectMapper().readValue(response.getEntity().getContent(), new TypeReference<>() {
         });
+    }
+
+    public HttpResponse postNewBoard(BoardPostRequestDto params, int status) throws IOException {
+        HttpResponse response = postRequest(URL, params);
+        Assertions.assertEquals(status, response.getStatusLine().getStatusCode());
+        return response;
     }
 
     public void postBoardWithEmptyName() throws IOException {

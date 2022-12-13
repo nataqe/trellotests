@@ -11,6 +11,10 @@ import dto.BoardResponseDto;
 import dto.OrganizationResponseDto;
 import enums.PrefsBackground;
 import helpers.FileHelper;
+import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
+import org.apache.http.impl.client.BasicResponseHandler;
+import org.apache.http.util.EntityUtils;
 import org.junit.jupiter.api.*;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -20,6 +24,7 @@ import java.io.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class BoardTests {
 
@@ -30,19 +35,18 @@ public class BoardTests {
 
     @BeforeAll
     static void createTestSpace() throws IOException {
-        OrganizationResponseDto newOrgResponse = organizationClient.postNewOrganization("testSpace");
-        organizationId = newOrgResponse.getId();
+        OrganizationResponseDto newOrganization = organizationClient.postNewOrganization("testSpace");
+        organizationId = newOrganization.getId();
     }
 
     @Test
     @DisplayName("POST a new board with required field name")
     public void testPostNewBoardWithCustomName() throws IOException {
         String boardName = "TestBoard_" + RandomStringUtils.random(5, true, true);
-        BoardResponseDto boardResponse = boardClient.postNewBoard(boardName);
-        BoardResponseDto newBoardResponse = boardClient.getBoardById(boardResponse.getId());
-        assertEquals(boardName, newBoardResponse.getName(), "The name of the new board should be " + boardName);
-        boardClient.deleteBoardById(boardResponse.getId());
-        boardClient.getNonExistingBoardById(boardResponse.getId());
+        BoardResponseDto newBoard = boardClient.postNewBoard(boardName);
+        BoardResponseDto newBoardById = boardClient.getBoardById(newBoard.getId());
+        assertEquals(boardName, newBoardById.getName(), "The name of the new board should be " + boardName);
+        boardClient.deleteBoardById(newBoard.getId());
     }
 
     @Test
@@ -72,12 +76,6 @@ public class BoardTests {
     }
 
     @Test
-    @DisplayName("POST a new board with empty name")
-    public void testPostBoardWithEmptyName() throws IOException {
-        boardClient.postBoardWithEmptyName();
-    }
-
-    @Test
     @DisplayName("PUT request to update existing board")
     public void testUpdateBoardWithAllParameters() throws IOException {
         BoardPostRequestDto boardInputRequest = new BoardInputDataProvider().getBoardInputTemplate()
@@ -92,6 +90,22 @@ public class BoardTests {
                 .usingRecursiveComparison()
                 .ignoringFields("id", "idOrganization", "shortUrl", "url")
                 .isEqualTo(updatedBoard);
+    }
+
+    @Test
+    @DisplayName("POST a new board with empty name")
+    public void testNegativePostBoardWithEmptyName() throws IOException {
+        BoardPostRequestDto boardInputRequest = new BoardInputDataProvider().getBoardInputTemplate()
+                .setName("");
+        HttpResponse response = boardClient.postNewBoard(boardInputRequest, HttpStatus.SC_BAD_REQUEST);
+        assertEquals("invalid value for name", EntityUtils.toString(response.getEntity()));
+    }
+
+    @Test
+    @DisplayName("GET non-existing board by id")
+    public void testNegativeGetNonExistingBoardById() throws IOException {
+        HttpResponse response = boardClient.getBoardById("999aa99a9aa9aa999a999aa9", HttpStatus.SC_NOT_FOUND);
+        assertEquals("The requested resource was not found.", EntityUtils.toString(response.getEntity()));
     }
 
     @AfterAll
