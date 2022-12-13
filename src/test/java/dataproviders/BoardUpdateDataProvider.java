@@ -1,6 +1,6 @@
 package dataproviders;
 
-import dto.BoardPutRequestDto;
+import dto.board.BoardPutRequestDto;
 import enums.PrefsPermissionLevel;
 
 import static enums.PrefsBackground.RED;

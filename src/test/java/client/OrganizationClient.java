@@ -2,7 +2,7 @@ package client;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import dto.OrganizationResponseDto;
+import dto.organization.OrganizationResponseDto;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.junit.jupiter.api.Assertions;

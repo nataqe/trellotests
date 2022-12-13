@@ -1,8 +1,8 @@
 package client;
 
-import dto.BoardPostRequestDto;
-import dto.BoardPutRequestDto;
-import dto.BoardResponseDto;
+import dto.board.BoardPostRequestDto;
+import dto.board.BoardPutRequestDto;
+import dto.board.BoardResponseDto;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.junit.jupiter.api.Assertions;
